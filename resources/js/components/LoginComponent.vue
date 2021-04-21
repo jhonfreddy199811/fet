@@ -1,54 +1,93 @@
 <template>
-<v-app id="inspire">
+  <v-app id="inspire">
     <v-main>
-        <v-container class="fill-height" fluid>
-            <v-row align="center" justify="center">
-                <v-col cols="12" sm="8" md="4">
-                    <v-card class="elevation-12">
-                        <v-toolbar color="primary" dark flat>
-                            <v-toolbar-title>Formulario de Acceso</v-toolbar-title>
-                            <v-spacer />
-                        </v-toolbar>
-                        <v-card-text>
-                            <v-form>
-                                <v-text-field label="Email" name="Email" prepend-icon="mdi-email" type="text" v-model="user.email" />
+      <v-container
+        class="fill-height"
+        fluid
+      >
+        <v-row
+          align="center"
+          justify="center"
+        >
+          <v-col
+            cols="12"
+            sm="8"
+            md="4"
+          >
+            <v-card class="elevation-12">
+              <v-toolbar
+                color="#00ACC1"
+                dark
+                flat
+              >
+                <v-toolbar-title>Formulario de Acceso</v-toolbar-title>
+                <v-spacer />
+              </v-toolbar>
+              <v-card-text>
+                <v-form>
+                  <v-text-field
+                    label="Email"
+                    name="Email"
+                    prepend-icon="mdi-email"
+                    type="text"
+                    v-model="user.email"
+                  />
 
-                                <v-text-field id="password" label="Password" name="password" prepend-icon="mdi-key" type="password" v-model="user.password" />
-                            </v-form>
-                        </v-card-text>
-
-                        <v-card-actions>
-                            <v-spacer />
-                            <v-btn color="primary" @click="login">Ingresar</v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-col>
-            </v-row>
-        </v-container>
+                  <v-text-field
+                    id="password"
+                    label="Password"
+                    name="password"
+                    prepend-icon="mdi-key"
+                    type="password"
+                    v-model="user.password"
+                  />
+                  <div class="text-error">{{message}}</div>
+                </v-form>
+              </v-card-text>
+             
+              <v-card-actions>
+                <v-spacer />
+                <v-btn class="cyan lighten-1" style="color: #fff" @click="login">Ingresar</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-main>
-</v-app>
+  </v-app>
 </template>
 
 <script>
-export default {
+  import { mapState } from 'vuex'
+  export default {
     data: () => ({
         user: {
-            email: "",
+            email: "", 
             password: ""
         }
-    })
-};
+    }),
+
+    computed: {
+       ...mapState('user', ['message']),
+    },
+
+    methods: {
+      login(){
+        this.$store.dispatch('user/getLogin', this.user);
+      }
+    }
+
+  }
 </script>
 
 <style>
-.div-error {
-    display: flex;
-    justify-content: center;
-}
-
-.text-error {
-    color: red !important;
-    font-weight: bold;
-    text-align: center;
-}
+    .div-error{
+        display: flex;
+        justify-content: center;
+    }
+    .text-error{
+        color: red !important;
+        font-weight: bold;
+        text-align: center;
+    }
 </style>

@@ -2,7 +2,7 @@
     <v-app id="inspire">
         <v-navigation-drawer v-model="drawer" app>
             <v-list dense>
-                <v-list-item link color="#15638A">
+                <v-list-item link color="#15638A" to="/example">
                     <v-list-item-action>
                         <v-icon>mdi-home</v-icon>
                     </v-list-item-action>
@@ -24,7 +24,7 @@
                             </v-list-item-title>
                         </v-list-item-content>
                     </template>
-                    <v-list-item link color="#15638A">
+                    <v-list-item link color="#15638A" to="/user">
                         <v-list-item-action>
                             <v-icon>mdi-account</v-icon>
                         </v-list-item-action>
@@ -45,7 +45,7 @@
                         </v-list-item-content>
                     </v-list-item>
                 </v-list-group>
-                <v-list-item link>
+                <v-list-item link @click="logout">
                     <v-list-item-action>
                         <v-icon>mdi-power</v-icon>
                     </v-list-item-action>
@@ -63,7 +63,7 @@
 
         <v-main>
             <v-container>
-                <!-- <router-view></router-view> -->
+                <router-view></router-view>
             </v-container>
         </v-main>
         <v-footer app color="#26C6DA" dark>
@@ -83,6 +83,20 @@ export default {
         dialog: false,
         drawer: true,
         model: false
-    })
+    }),
+    methods: {
+        logout(){
+            this.$store.dispatch('user/getLogout');
+        }
+    },
+    created(){
+        this.token = localStorage.getItem("blog_token")
+        if(this.token){
+            axios.defaults.headers.common['Authorization'] = "Bearer " + this.token
+            this.$store.dispatch('user/getCurrent')
+        }else{
+            window.location.replace('login')
+        }
+    }
 };
 </script>
