@@ -21,7 +21,7 @@
                                     <v-icon
                                         medium
                                         color="#15638A"
-                                        @click="openModal('update', item)"
+                                        @click="openModal('update', items)"
                                         >mdi-pencil</v-icon
                                     >
                                 </td>
@@ -48,7 +48,7 @@
                     </v-card-title>
                     <v-container>
                         <v-row>
-                            <v-col cols="12" md="3">
+                            <v-col cols="12" md="4">
                                 <v-text-field label="Name" v-model="user.name">
                                 </v-text-field>
                             </v-col>
@@ -59,7 +59,25 @@
                                 >
                                 </v-text-field>
                             </v-col>
-                            <v-col cols="12" md="3">
+                            <v-col cols="12" md="3" v-if="actionForm == 2">
+                                <v-select
+                                item-text="name"
+                                item-value="id"
+                                :items="items"
+                                label="Desea cambiar la contraseña"
+                                v-model="checkPassword"
+                                >
+                                </v-select>
+                            </v-col>
+                            <v-col cols="12" md="3" v-if="checkPassword == 1">
+                                <v-text-field
+                                    type="password"
+                                    label="New Password"
+                                    v-model="user.password"
+                                >
+                                </v-text-field>
+                            </v-col>
+                            <v-col cols="12" md="3" v-if="actionForm == 1">
                                 <v-text-field
                                     type="password"
                                     label="Password"
@@ -75,8 +93,11 @@
                     </v-container>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="primary" text @click="save">
+                        <v-btn v-if="actionForm == 1" color="primary" text @click="save">
                             Save
+                        </v-btn>
+                          <v-btn v-if="actionForm == 2" color="primary" text @click="update">
+                            Edit
                         </v-btn>
                     </v-card-actions>
                 </v-card>
@@ -91,14 +112,20 @@ export default {
     data() {
         return {
             dialog: false,
+            actionForm: 0,
             user: {
                 name: '',
                 email: '',
                 password: ''
             },
             errorUser: 0,
-            errorMessage: []
-        };
+            errorMessage: [],
+            items: [
+                {id: 1, name:'si'},
+                {id: 2, name:'no'},
+            ],
+            checkPassword: 2
+        }
     },
     computed: {
         ...mapState('user', ['listUsers', 'message' ])
@@ -107,22 +134,30 @@ export default {
         validate(){
             this.errorUser = 0
             this.errorMessage= []
-            if(!this.user.name) {this.errorMessage.push("Dijite el nombre de usuario")}
-            if(!this.user.email) {this.errorMessage.push("Dijite email de usuario")}
-            if(!this.user.name) {this.errorMessage.push("Dijite contraseña de usuario")}
-            if(this.errorMessage.length){this.errorUser = 1}
+            if(this.actionForm == 1){
+                if(!this.user.name) {this.errorMessage.push("Dijite el nombre de usuario")}
+                if(!this.user.email) {this.errorMessage.push("Dijite email de usuario")}
+                if(!this.user.password) {this.errorMessage.push("Dijite contraseña de usuario")}
+                if(this.errorMessage.length){this.errorUser = 1}
+            }else{
+                if(!this.user.name) {this.errorMessage.push("Dijite el nombre de usuario")}
+                if(!this.user.email) {this.errorMessage.push("Dijite email de usuario")}
+                if(this.errorMessage.length){this.errorUser = 1}
+            }
             return this.errorUser
         },
         openModal(action, data){
             this.dialog = true
             switch (action){
                 case 'insert':
+                    this.actionForm = 1
                     this.user.name= ''
                     this.user.email= ''
                     this.user.password= ''
                     break;
 
                 case 'update':
+                    this.actionForm = 2
                     this.user.name = data.name
                     this.user.email = data.email
                     this.user.password = data.password
@@ -147,6 +182,12 @@ export default {
                     this.errorMessage = e.response.data.errors
                 }
             })
+        },
+        update(){
+             if (this.validate()) {
+              return
+            }
+            alert('actualizo')
         }
     },
     mounted() {
