@@ -2,11 +2,14 @@ import axios from 'axios'
 
 const state = {
     message: '',
-    listUsers :[]
+    listUsers :[],
+    errorMessage: []
 }
 
 const actions = {
     getLogin({commit}, user){
+        commit('SET_MESSAGE', '')
+        commit('SET_ERRORS', [])
         axios.post('user/login', {
             email: user.email,
             password: user.password
@@ -21,6 +24,11 @@ const actions = {
             if(response.data.message){
                 commit('SET_MESSAGE', response.data.message)
             }
+        }).catch((e)=>{
+            if(e.response.data.errors){
+                commit('SET_ERRORS',e.response.data.errors)
+            }
+            console.log()
         })
     },
     getCurrent({commit}){
@@ -55,6 +63,9 @@ const mutations = {
     },
     SetUsers(state, data){
         state.listUsers = data
+    },
+    SET_ERRORS(state, data){
+        state.errorMessage = data
     }
 }
 

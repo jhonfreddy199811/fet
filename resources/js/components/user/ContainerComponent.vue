@@ -21,7 +21,7 @@
                                     <v-icon
                                         medium
                                         color="#15638A"
-                                        @click="dialog = true"
+                                        @click="openModal('update', item)"
                                         >mdi-pencil</v-icon
                                     >
                                 </td>
@@ -37,7 +37,7 @@
                 fab
                 fixed
                 right
-                @click="dialog = true"
+                @click="openModal('insert')"
             >
                 <v-icon>mdi-plus</v-icon>
             </v-btn>
@@ -92,10 +92,11 @@ export default {
         return {
             dialog: false,
             user: {
-                name: "",
-                email: "",
-                password: ""
+                name: '',
+                email: '',
+                password: ''
             },
+            errorUser: 0,
             errorMessage: []
         };
     },
@@ -103,7 +104,38 @@ export default {
         ...mapState('user', ['listUsers', 'message' ])
     },
     methods: {
+        validate(){
+            this.errorUser = 0
+            this.errorMessage= []
+            if(!this.user.name) {this.errorMessage.push("Dijite el nombre de usuario")}
+            if(!this.user.email) {this.errorMessage.push("Dijite email de usuario")}
+            if(!this.user.name) {this.errorMessage.push("Dijite contraseña de usuario")}
+            if(this.errorMessage.length){this.errorUser = 1}
+            return this.errorUser
+        },
+        openModal(action, data){
+            this.dialog = true
+            switch (action){
+                case 'insert':
+                    this.user.name= ''
+                    this.user.email= ''
+                    this.user.password= ''
+                    break;
+
+                case 'update':
+                    this.user.name = data.name
+                    this.user.email = data.email
+                    this.user.password = data.password
+                    break;
+
+                default:
+                    break;
+            }
+        },
         save() {
+            if (this.validate()) {
+              return
+            }
             this.$store.dispatch("user/saveUser", this.user)
             .then(()=>{
                 this.$store.dispatch("user/getList")
