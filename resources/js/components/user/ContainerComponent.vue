@@ -21,7 +21,7 @@
                                     <v-icon
                                         medium
                                         color="#15638A"
-                                        @click="openModal('update', items)"
+                                        @click="openModal('update', item)"
                                         >mdi-pencil</v-icon
                                     >
                                 </td>
