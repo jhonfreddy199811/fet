@@ -146,6 +146,12 @@ export default {
             }
             return this.errorUser
         },
+        clearMessageError(){
+              this.chekPassword=2
+              this.errorMessage=[]
+              this.errorUser=0
+
+          },
         openModal(action, data){
             this.dialog = true
             switch (action){
@@ -154,6 +160,8 @@ export default {
                     this.user.name= ''
                     this.user.email= ''
                     this.user.password= ''
+                    this.checkPassword=2
+                    this.clearMessageError()
                     break;
 
                 case 'update':
@@ -161,6 +169,8 @@ export default {
                     this.user.name = data.name
                     this.user.email = data.email
                     this.user.password = data.password
+                    this.checkPassword=2
+                    this.clearMessageError()
                     break;
 
                 default:
