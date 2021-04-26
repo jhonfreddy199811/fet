@@ -9,6 +9,7 @@
                                 <th class="text-left">Name</th>
                                 <th class="text-left">Email</th>
                                 <th class="text-left">Creations Date</th>
+                                <th class="text-left">Creations Update</th>
                                 <th class="text-left">Options</th>
                             </tr>
                         </thead>
@@ -17,6 +18,7 @@
                                 <td>{{ item.name }}</td>
                                 <td>{{ item.email }}</td>
                                 <td>{{ item.created_at }}</td>
+                                <td>{{ item.updated_at }}</td>
                                 <td>
                                     <v-icon
                                         medium
@@ -114,6 +116,7 @@ export default {
             dialog: false,
             actionForm: 0,
             user: {
+                id: 0,
                 name: '',
                 email: '',
                 password: ''
@@ -142,6 +145,9 @@ export default {
             }else{
                 if(!this.user.name) {this.errorMessage.push("Dijite el nombre de usuario")}
                 if(!this.user.email) {this.errorMessage.push("Dijite email de usuario")}
+                if(this.checkPassword == 1){
+                    if(!this.user.password){this.errorMessage.push("Dijite nueva contraseña")}
+                }
                 if(this.errorMessage.length){this.errorUser = 1}
             }
             return this.errorUser
@@ -157,19 +163,19 @@ export default {
             switch (action){
                 case 'insert':
                     this.actionForm = 1
+                    this.user.id = 0
                     this.user.name= ''
                     this.user.email= ''
                     this.user.password= ''
-                    this.checkPassword=2
                     this.clearMessageError()
                     break;
 
                 case 'update':
                     this.actionForm = 2
+                    this.user.id = data.id
                     this.user.name = data.name
                     this.user.email = data.email
                     this.user.password = data.password
-                    this.checkPassword=2
                     this.clearMessageError()
                     break;
 
@@ -181,9 +187,9 @@ export default {
             if (this.validate()) {
               return
             }
-            this.$store.dispatch("user/saveUser", this.user)
+            this.$store.dispatch('user/saveUser', this.user)
             .then(()=>{
-                this.$store.dispatch("user/getList")
+                this.$store.dispatch('user/getList')
                 this.dialog = false
             }).catch((e)=>{
                 console.log(e.response.data.errors)
@@ -197,11 +203,15 @@ export default {
              if (this.validate()) {
               return
             }
-            alert('actualizo')
+            this.$store.dispatch('user/updateUser', this.user)
+            .then(()=>{
+                this.$store.dispatch('user/getList')
+                this.dialog =false
+            })
         }
     },
     mounted() {
-        this.$store.dispatch("user/getList");
+        this.$store.dispatch('user/getList');
     }
 };
 </script>
