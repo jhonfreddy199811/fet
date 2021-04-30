@@ -16,7 +16,7 @@
           >
             <v-card class="elevation-12">
               <v-toolbar
-                color="#00ACC1"
+                color="#C62828"
                 dark
                 flat
               >
@@ -45,10 +45,10 @@
                   <div class="text-error" v-for="(error,index) in errorMessage" :key="index" v-text="error"></div>
                 </v-form>
               </v-card-text>
-             
+
               <v-card-actions>
                 <v-spacer />
-                <v-btn class="cyan lighten-1" style="color: #fff" @click="login">Ingresar</v-btn>
+                <v-btn class="red darken-3" style="color: #fff" @click="login">Ingresar</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
@@ -63,7 +63,7 @@
   export default {
     data: () => ({
         user: {
-            email: "", 
+            email: "",
             password: ""
         }
     }),

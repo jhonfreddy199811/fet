@@ -8,8 +8,8 @@
                             <tr>
                                 <th class="text-left">Name</th>
                                 <th class="text-left">Email</th>
-                                <th class="text-left">Creations Date</th>
-                                <th class="text-left">Creations Update</th>
+                                <th class="text-left">fecha</th>
+                                <th class="text-left">fecha</th>
                                 <th class="text-left">Options</th>
                             </tr>
                         </thead>
@@ -22,7 +22,7 @@
                                 <td>
                                     <v-icon
                                         medium
-                                        color="#15638A"
+                                        color="#C62828"
                                         @click="openModal('update', item)"
                                         >mdi-pencil</v-icon
                                     >
@@ -34,7 +34,7 @@
             </v-container>
             <v-btn
                 bottom
-                color="#15638A"
+                color="#C62828"
                 dark
                 fab
                 fixed
@@ -45,7 +45,7 @@
             </v-btn>
             <v-dialog v-model="dialog" width="800">
                 <v-card>
-                    <v-card-title class="cyan lighten-1" style="color: #fff">
+                    <v-card-title class="red darken-3" style="color: #fff">
                         Form Users
                     </v-card-title>
                     <v-container>
@@ -74,7 +74,7 @@
                             <v-col cols="12" md="3" v-if="checkPassword == 1">
                                 <v-text-field
                                     type="password"
-                                    label="New Password"
+                                    label="Password"
                                     v-model="user.password"
                                 >
                                 </v-text-field>
@@ -91,7 +91,6 @@
                         <div>
                             <div v-for="(errors,id) in errorMessage" :key="id" v-text="errors" style="text-align:center; color:red;">{{errorMessage}}</div>
                         </div>
-                        <pre>{{ user }}</pre>
                     </v-container>
                     <v-card-actions>
                         <v-spacer></v-spacer>
@@ -138,15 +137,15 @@ export default {
             this.errorUser = 0
             this.errorMessage= []
             if(this.actionForm == 1){
-                if(!this.user.name) {this.errorMessage.push("Dijite el nombre de usuario")}
-                if(!this.user.email) {this.errorMessage.push("Dijite email de usuario")}
-                if(!this.user.password) {this.errorMessage.push("Dijite contraseña de usuario")}
+                if(!this.user.name) {this.errorMessage.push("usuario")}
+                if(!this.user.email) {this.errorMessage.push("usuario")}
+                if(!this.user.password) {this.errorMessage.push("usuario")}
                 if(this.errorMessage.length){this.errorUser = 1}
             }else{
-                if(!this.user.name) {this.errorMessage.push("Dijite el nombre de usuario")}
-                if(!this.user.email) {this.errorMessage.push("Dijite email de usuario")}
+                if(!this.user.name) {this.errorMessage.push("usuario")}
+                if(!this.user.email) {this.errorMessage.push("usuario")}
                 if(this.checkPassword == 1){
-                    if(!this.user.password){this.errorMessage.push("Dijite nueva contraseña")}
+                    if(!this.user.password){this.errorMessage.push("contraseña")}
                 }
                 if(this.errorMessage.length){this.errorUser = 1}
             }
